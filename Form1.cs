@@ -144,12 +144,6 @@ namespace vdrugs
       btnClear.Enabled = lstDrugs.Items.Count > 0;
     }
 
-    private void tbDrug_KeyPress(object sender, KeyPressEventArgs e)
-    {
-      if (e.KeyChar == (Char)Keys.Return)
-        CheckDrug();
-    }
-
     private void tbDrug_KeyUp(object sender, KeyEventArgs e)
     {
       if (e.KeyCode == Keys.Return)

@@ -43,7 +43,6 @@
       // 
       // tbDrug
       // 
-      this.tbDrug.AcceptsReturn = true;
       this.tbDrug.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
       this.tbDrug.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
       this.tbDrug.Location = new System.Drawing.Point(12, 32);
@@ -120,7 +119,7 @@
       this.btnCheck.Name = "btnCheck";
       this.btnCheck.Size = new System.Drawing.Size(75, 23);
       this.btnCheck.TabIndex = 7;
-      this.btnCheck.Text = "Уточнить";
+      this.btnCheck.Text = "Найти";
       this.btnCheck.UseVisualStyleBackColor = true;
       this.btnCheck.Click += new System.EventHandler(this.btnCheck_Click);
       // 
