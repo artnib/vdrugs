@@ -35,6 +35,7 @@ namespace vdrugs
     string drugFile;
     string autoFile;
     int hintCount;
+    const string baseUrl = "http://analit.net";
 
     private void Form1_Load(object sender, EventArgs e)
     {
@@ -48,8 +49,8 @@ namespace vdrugs
 
     private void CheckDrug()
     {
-      const String drugFmt = "http://analit.net/apteka/Main/SearchResult?filter.query={0}&filter.region=1099511627776";
-      var url = String.Format(drugFmt, tbDrug.Text);
+      const String drugFmt = "{1}/apteka/Main/SearchResult?filter.query={0}&filter.region=1099511627776";
+      var url = String.Format(drugFmt, tbDrug.Text, baseUrl);
       var drugStream = wc.OpenRead(url);
       var options = GetOptions(drugStream);
       if (options.Count == 0) //ничего не найдено
