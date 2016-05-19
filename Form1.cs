@@ -147,16 +147,7 @@ namespace vdrugs
     List<DrugInfo> GetOptions(Stream ostream)
     {
       var options = new List<DrugInfo>();
-      var sr = new StreamReader(ostream);
-      var html = sr.ReadToEnd();
-      sr.Close();
-      const string searchTable = "<table id=\"searchTable\" class=\"drug_result\"";
-      var tableStart = html.IndexOf(searchTable);
-      if (tableStart != -1)
-      {
-        var tbodyPos = html.IndexOf("<tbody>", tableStart);
-        var tableEnd = html.IndexOf("</table>", tbodyPos);
-        var tableCode = html.Substring(tbodyPos, tableEnd - tbodyPos);
+        var tableCode = GetTableCode(ostream, "<table id=\"searchTable\" class=\"drug_result\"");
         var tr = new string[] { "</tr>" }; //разделитель строк таблицы
         var td = new string[] { "</td>" }; //разделитель ячеек таблицы
         var rows = tableCode.Split(tr, StringSplitOptions.None); //строки
@@ -170,7 +161,6 @@ namespace vdrugs
             Option = ClearCell(cells[2]) };
           options.Add(di);
         }
-      }
       return options;
     }
 
@@ -220,10 +210,40 @@ namespace vdrugs
 
     List<DrugInfo> drugs;
 
+    /// <summary>
+    /// Возвращет код тела таблицы
+    /// </summary>
+    /// <param name="stream">Поток с кодом HTML</param>
+    /// <param name="tableTag">Открывающий тег таблицы</param>
+    /// <returns>Код тела таблицы</returns>
+    string GetTableCode(Stream stream, string tableTag)
+    {
+      var code = String.Empty;
+      var sr = new StreamReader(stream);
+      var html = sr.ReadToEnd();
+      sr.Close();
+      var tableStart = html.IndexOf(tableTag);
+      if (tableStart != -1)
+      {
+        var tbodyPos = html.IndexOf("<tbody>", tableStart);
+        var tableEnd = html.IndexOf("</table>", tbodyPos);
+        code = html.Substring(tbodyPos, tableEnd - tbodyPos);
+      }
+      return code;
+    }
+
+    /// <summary>
+    /// Получает цены на лекарство
+    /// </summary>
+    /// <param name="pstream">Поток с ценами</param>
+    /// <returns>Список цен</returns>
     List<DrugPrice> GetPrices(Stream pstream)
     {
       var prices = new List<DrugPrice>();
-
+      var sr = new StreamReader(pstream);
+      var html = sr.ReadToEnd();
+      sr.Close();
+      var tableCode = GetTableCode(pstream, "<table class=\"drug_result\"");
       return prices;
     }
   }
