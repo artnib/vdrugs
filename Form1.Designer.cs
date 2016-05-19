@@ -51,7 +51,6 @@
       this.tbDrug.TabIndex = 0;
       this.tbDrug.WordWrap = false;
       this.tbDrug.TextChanged += new System.EventHandler(this.tbDrug_TextChanged);
-      this.tbDrug.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbDrug_KeyPress);
       this.tbDrug.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tbDrug_KeyUp);
       // 
       // label1
