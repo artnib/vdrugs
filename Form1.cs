@@ -223,7 +223,7 @@ namespace vdrugs
         var linkStart = hrefPos + href.Length;
         var linkEnd = cell.IndexOf("\">");
         if (linkEnd != -1)
-          return cell.Substring(linkStart, linkEnd - linkStart);
+          link = cell.Substring(linkStart, linkEnd - linkStart).Replace("&amp;", "&");
       }
       return link;
     }
@@ -279,9 +279,6 @@ namespace vdrugs
     List<DrugPrice> GetPrices(Stream pstream)
     {
       var prices = new List<DrugPrice>();
-      //var sr = new StreamReader(pstream);
-      //var html = sr.ReadToEnd();
-      //sr.Close();
       var tableCode = GetTableCode(pstream, "<table class=\"drug_result\"");
       var rows = GetRows(tableCode);
       DrugPrice dp;
@@ -293,6 +290,7 @@ namespace vdrugs
           Price = Decimal.Parse(cells[4]),
           Address = cells[5]
         };
+        prices.Add(dp);
       }
       return prices;
     }
@@ -311,6 +309,7 @@ namespace vdrugs
           if (resultForm == null)
             resultForm = new ResultForm();
           resultForm.SetResults((List<DrugSet>)e.Result);
+          resultForm.ShowDialog(this);
         }
     }
     
