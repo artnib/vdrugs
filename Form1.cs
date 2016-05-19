@@ -75,26 +75,53 @@ namespace vdrugs
       var sr = new StreamReader(ostream);
       var html = sr.ReadToEnd();
       sr.Close();
-      var tableStart = html.IndexOf("<table id=\"searchTable\" class=\"drug_result\"");
+      const string searchTable = "<table id=\"searchTable\" class=\"drug_result\"";
+      var tableStart = html.IndexOf(searchTable);
       if (tableStart != -1)
       {
         var tbodyPos = html.IndexOf("<tbody>", tableStart);
         var tableEnd = html.IndexOf("</table>", tbodyPos);
         var tableCode = html.Substring(tbodyPos, tableEnd - tbodyPos);
-        var tr = new string[] { "</tr>" };
-        var td = new string[] { "</td>" };
-        var rows = tableCode.Split(tr, StringSplitOptions.None);
+        var tr = new string[] { "</tr>" }; //разделитель строк таблицы
+        var td = new string[] { "</td>" }; //разделитель ячеек таблицы
+        var rows = tableCode.Split(tr, StringSplitOptions.None); //строки
         DrugInfo di;
         for (int i = 0; i < rows.Length - 2; i++)
         {
-          var cells = rows[i].Split(td, StringSplitOptions.None);
+          var cells = rows[i].Split(td, StringSplitOptions.None); //ячейки
           di = new DrugInfo {
             Name = tbDrug.Text,
-            Option = cells[2].Trim().Replace("<td>", String.Empty) };
+            FindLink = GetFindLink(ClearCell(cells[1])),
+            Option = ClearCell(cells[2]) };
           options.Add(di);
         }
       }
       return options;
+    }
+
+    /// <summary>
+    /// Возвращает содержимое ячейки таблицы
+    /// </summary>
+    /// <param name="cell">Код ячейки</param>
+    /// <returns>Содержимое ячейки</returns>
+    static string ClearCell(string cell)
+    {
+      return cell.Replace("<td>", String.Empty).Trim();
+    }
+
+    static string GetFindLink(string cell)
+    {
+      var link = String.Empty;
+      const string href = "href=\"";
+      var hrefPos = cell.IndexOf(href);
+      if (hrefPos != -1)
+      {
+        var linkStart = hrefPos + href.Length;
+        var linkEnd = cell.IndexOf("\">");
+        if (linkEnd != -1)
+          return cell.Substring(linkStart, linkEnd - linkStart);
+      }
+      return link;
     }
 
     private void Form1_FormClosed(object sender, FormClosedEventArgs e)

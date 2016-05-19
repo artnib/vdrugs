@@ -17,6 +17,11 @@ namespace vdrugs
     /// </summary>
     public string Option;
 
+    /// <summary>
+    /// Поисковый запрос
+    /// </summary>
+    public string FindLink;
+
     public override string ToString()
     {
       return String.Format("{0} {1}", Name, Option);
