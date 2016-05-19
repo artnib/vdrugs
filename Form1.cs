@@ -18,7 +18,6 @@ namespace vdrugs
 
     AutoCompleteStringCollection autoDrugs;
     WebClient wc;
-    //http://analit.net/apteka/Main/SearchResult?filter.query=%D0%BB%D0%B8%D0%B7%D0%BE%D0%B1%D0%B0%D0%BA%D1%82&filter.region=1099511627776
 
     private void btnCheck_Click(object sender, EventArgs e)
     {
@@ -28,6 +27,8 @@ namespace vdrugs
     private void tbDrug_TextChanged(object sender, EventArgs e)
     {
       btnCheck.Enabled = tbDrug.Text.Length > 0;
+      if (tbDrug.Text.Length == 0)
+        lbNotFound.Visible = false;
     }
 
     string appDir;
@@ -51,10 +52,21 @@ namespace vdrugs
       var url = String.Format(drugFmt, tbDrug.Text);
       var drugStream = wc.OpenRead(url);
       var options = GetOptions(drugStream);
-      if (options.Count > 0 && !autoDrugs.Contains(tbDrug.Text))
+      if (options.Count == 0) //ничего не найдено
+      {
+        lbNotFound.Visible = true;
+        return;
+      }
+      if (!autoDrugs.Contains(tbDrug.Text))
         autoDrugs.Add(tbDrug.Text);
-      foreach (DrugInfo di in options)
-        lstOptions.Items.Add(di.Option);
+      if (options.Count == 1)
+      {
+        lstDrugs.Items.Add(options[0]);
+        btnClear.Enabled = true;
+      }
+      else
+        foreach (DrugInfo di in options)
+          lstOptions.Items.Add(di);
     }
 
     List<DrugInfo> GetOptions(Stream ostream)
@@ -64,19 +76,20 @@ namespace vdrugs
       var html = sr.ReadToEnd();
       sr.Close();
       var tableStart = html.IndexOf("<table id=\"searchTable\" class=\"drug_result\"");
-      var tbodyPos = html.IndexOf("<tbody>", tableStart);
-      if (tableStart != -1 && tbodyPos != -1)
+      if (tableStart != -1)
       {
+        var tbodyPos = html.IndexOf("<tbody>", tableStart);
         var tableEnd = html.IndexOf("</table>", tbodyPos);
         var tableCode = html.Substring(tbodyPos, tableEnd - tbodyPos);
         var tr = new string[] { "</tr>" };
-        var td=new string[] { "</td>" };
+        var td = new string[] { "</td>" };
         var rows = tableCode.Split(tr, StringSplitOptions.None);
         DrugInfo di;
         for (int i = 0; i < rows.Length - 2; i++)
         {
           var cells = rows[i].Split(td, StringSplitOptions.None);
           di = new DrugInfo {
+            Name = tbDrug.Text,
             Option = cells[2].Trim().Replace("<td>", String.Empty) };
           options.Add(di);
         }
@@ -96,6 +109,51 @@ namespace vdrugs
       foreach (string hint in autoDrugs)
         sw.WriteLine(hint);
       sw.Close();
+    }
+
+    private void btnAdd_Click(object sender, EventArgs e)
+    {
+      lstDrugs.Items.Add(lstOptions.SelectedItem);
+      lstOptions.Items.RemoveAt(lstOptions.SelectedIndex);
+      btnClear.Enabled = true;
+    }
+
+    private void lstOptions_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      CheckListButton(lstOptions, btnAdd);
+    }
+
+    private void lstDrugs_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      CheckListButton(lstDrugs, btnDel);
+    }
+
+    void CheckListButton(ListBox lst, Button button)
+    {
+      button.Enabled = lst.SelectedIndex != -1;
+    }
+
+    private void btnClear_Click(object sender, EventArgs e)
+    {
+      lstDrugs.Items.Clear();
+    }
+
+    private void btnDel_Click(object sender, EventArgs e)
+    {
+      lstDrugs.Items.RemoveAt(lstDrugs.SelectedIndex);
+      btnClear.Enabled = lstDrugs.Items.Count > 0;
+    }
+
+    private void tbDrug_KeyPress(object sender, KeyPressEventArgs e)
+    {
+      if (e.KeyChar == (Char)Keys.Return)
+        CheckDrug();
+    }
+
+    private void tbDrug_KeyUp(object sender, KeyEventArgs e)
+    {
+      if (e.KeyCode == Keys.Return)
+        CheckDrug();
     }
   }
 }

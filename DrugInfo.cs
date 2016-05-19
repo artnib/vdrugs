@@ -1,4 +1,6 @@
-﻿namespace vdrugs
+﻿using System;
+
+namespace vdrugs
 {
   /// <summary>
   /// Сведения о лекарстве
@@ -14,6 +16,11 @@
     /// Форма выпуска
     /// </summary>
     public string Option;
+
+    public override string ToString()
+    {
+      return String.Format("{0} {1}", Name, Option);
+    }
 
   }
 }

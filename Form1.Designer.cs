@@ -30,24 +30,30 @@
     {
       this.tbDrug = new System.Windows.Forms.TextBox();
       this.label1 = new System.Windows.Forms.Label();
-      this.button1 = new System.Windows.Forms.Button();
+      this.btnAdd = new System.Windows.Forms.Button();
       this.label2 = new System.Windows.Forms.Label();
       this.lstDrugs = new System.Windows.Forms.ListBox();
-      this.button2 = new System.Windows.Forms.Button();
+      this.btnDel = new System.Windows.Forms.Button();
       this.lstOptions = new System.Windows.Forms.ListBox();
       this.btnCheck = new System.Windows.Forms.Button();
       this.label3 = new System.Windows.Forms.Label();
+      this.lbNotFound = new System.Windows.Forms.Label();
+      this.btnClear = new System.Windows.Forms.Button();
       this.SuspendLayout();
       // 
       // tbDrug
       // 
+      this.tbDrug.AcceptsReturn = true;
       this.tbDrug.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
       this.tbDrug.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
       this.tbDrug.Location = new System.Drawing.Point(12, 32);
       this.tbDrug.Name = "tbDrug";
       this.tbDrug.Size = new System.Drawing.Size(300, 20);
       this.tbDrug.TabIndex = 0;
+      this.tbDrug.WordWrap = false;
       this.tbDrug.TextChanged += new System.EventHandler(this.tbDrug_TextChanged);
+      this.tbDrug.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbDrug_KeyPress);
+      this.tbDrug.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tbDrug_KeyUp);
       // 
       // label1
       // 
@@ -58,14 +64,16 @@
       this.label1.TabIndex = 1;
       this.label1.Text = "Лекарство";
       // 
-      // button1
+      // btnAdd
       // 
-      this.button1.Location = new System.Drawing.Point(324, 116);
-      this.button1.Name = "button1";
-      this.button1.Size = new System.Drawing.Size(75, 23);
-      this.button1.TabIndex = 2;
-      this.button1.Text = "Добавить";
-      this.button1.UseVisualStyleBackColor = true;
+      this.btnAdd.Enabled = false;
+      this.btnAdd.Location = new System.Drawing.Point(324, 111);
+      this.btnAdd.Name = "btnAdd";
+      this.btnAdd.Size = new System.Drawing.Size(75, 23);
+      this.btnAdd.TabIndex = 2;
+      this.btnAdd.Text = "Добавить";
+      this.btnAdd.UseVisualStyleBackColor = true;
+      this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
       // 
       // label2
       // 
@@ -83,15 +91,18 @@
       this.lstDrugs.Name = "lstDrugs";
       this.lstDrugs.Size = new System.Drawing.Size(297, 108);
       this.lstDrugs.TabIndex = 4;
+      this.lstDrugs.SelectedIndexChanged += new System.EventHandler(this.lstDrugs_SelectedIndexChanged);
       // 
-      // button2
+      // btnDel
       // 
-      this.button2.Location = new System.Drawing.Point(327, 245);
-      this.button2.Name = "button2";
-      this.button2.Size = new System.Drawing.Size(75, 23);
-      this.button2.TabIndex = 5;
-      this.button2.Text = "Удалить";
-      this.button2.UseVisualStyleBackColor = true;
+      this.btnDel.Enabled = false;
+      this.btnDel.Location = new System.Drawing.Point(324, 237);
+      this.btnDel.Name = "btnDel";
+      this.btnDel.Size = new System.Drawing.Size(75, 23);
+      this.btnDel.TabIndex = 5;
+      this.btnDel.Text = "Удалить";
+      this.btnDel.UseVisualStyleBackColor = true;
+      this.btnDel.Click += new System.EventHandler(this.btnDel_Click);
       // 
       // lstOptions
       // 
@@ -100,6 +111,7 @@
       this.lstOptions.Name = "lstOptions";
       this.lstOptions.Size = new System.Drawing.Size(297, 82);
       this.lstOptions.TabIndex = 6;
+      this.lstOptions.SelectedIndexChanged += new System.EventHandler(this.lstOptions_SelectedIndexChanged);
       // 
       // btnCheck
       // 
@@ -121,22 +133,46 @@
       this.label3.TabIndex = 8;
       this.label3.Text = "Варианты выпуска";
       // 
+      // lbNotFound
+      // 
+      this.lbNotFound.AutoSize = true;
+      this.lbNotFound.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      this.lbNotFound.Location = new System.Drawing.Point(74, 16);
+      this.lbNotFound.Name = "lbNotFound";
+      this.lbNotFound.Size = new System.Drawing.Size(78, 13);
+      this.lbNotFound.TabIndex = 9;
+      this.lbNotFound.Text = "не найдено!";
+      this.lbNotFound.Visible = false;
+      // 
+      // btnClear
+      // 
+      this.btnClear.Enabled = false;
+      this.btnClear.Location = new System.Drawing.Point(324, 266);
+      this.btnClear.Name = "btnClear";
+      this.btnClear.Size = new System.Drawing.Size(75, 23);
+      this.btnClear.TabIndex = 10;
+      this.btnClear.Text = "Очистить";
+      this.btnClear.UseVisualStyleBackColor = true;
+      this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+      // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(413, 412);
+      this.Controls.Add(this.btnClear);
+      this.Controls.Add(this.lbNotFound);
       this.Controls.Add(this.label3);
       this.Controls.Add(this.btnCheck);
       this.Controls.Add(this.lstOptions);
-      this.Controls.Add(this.button2);
+      this.Controls.Add(this.btnDel);
       this.Controls.Add(this.lstDrugs);
       this.Controls.Add(this.label2);
-      this.Controls.Add(this.button1);
+      this.Controls.Add(this.btnAdd);
       this.Controls.Add(this.label1);
       this.Controls.Add(this.tbDrug);
       this.Name = "Form1";
-      this.Text = "Поиск лекарств";
+      this.Text = "Поиск лекарств в Воронеже";
       this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
       this.Load += new System.EventHandler(this.Form1_Load);
       this.ResumeLayout(false);
@@ -148,13 +184,15 @@
 
     private System.Windows.Forms.TextBox tbDrug;
     private System.Windows.Forms.Label label1;
-    private System.Windows.Forms.Button button1;
+    private System.Windows.Forms.Button btnAdd;
     private System.Windows.Forms.Label label2;
     private System.Windows.Forms.ListBox lstDrugs;
-    private System.Windows.Forms.Button button2;
+    private System.Windows.Forms.Button btnDel;
     private System.Windows.Forms.ListBox lstOptions;
     private System.Windows.Forms.Button btnCheck;
     private System.Windows.Forms.Label label3;
+    private System.Windows.Forms.Label lbNotFound;
+    private System.Windows.Forms.Button btnClear;
   }
 }
 
