@@ -106,11 +106,34 @@ namespace vdrugs
     private void bg_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
     {
       Stream priceStream;
+      List<DrugPrice> prices;
+      var pharmacy = new Dictionary<string, List<DrugPrice>>();
+      string address;
       foreach (DrugInfo drug in drugs)
       {
         priceStream = wc.OpenRead(String.Format("{0}{1}", baseUrl, drug.FindLink));
-
+        prices = GetPrices(priceStream);
+        foreach (DrugPrice dp in prices)
+        {
+          address = dp.Address;
+          if (!pharmacy.ContainsKey(address))
+            pharmacy.Add(address, new List<DrugPrice>());
+          pharmacy[address].Add(dp);
+        }
       }
+      DrugSet ds;
+      var drugSets = new List<DrugSet>();
+      foreach(string addr in pharmacy.Keys)
+        if (pharmacy[addr].Count == drugs.Count) //есть все нужные лекарства
+        {
+          ds = new DrugSet
+          {
+            Address = addr,
+            Drugs = pharmacy[addr]
+          };
+          drugSets.Add(ds);
+        }
+      e.Result = drugSets;
     }
 
     #endregion
@@ -271,5 +294,17 @@ namespace vdrugs
       }
       return prices;
     }
+
+     private void bg_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+    {
+      if (e.Error != null)
+        MessageBox.Show(e.Error.Message);
+      else
+        if(e.Cancelled)
+          MessageBox.Show("Поиск отменён");
+        else
+          MessageBox.Show("Поиск закончен");
+    }
+    
   }
 }

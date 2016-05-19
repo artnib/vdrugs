@@ -172,6 +172,7 @@
       // 
       this.bg.WorkerSupportsCancellation = true;
       this.bg.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bg_DoWork);
+      this.bg.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bg_RunWorkerCompleted);
       // 
       // btnCancel
       // 
