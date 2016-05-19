@@ -10,7 +10,7 @@ namespace vdrugs
     /// <summary>
     /// Лекарство
     /// </summary>
-    public DrugInfo Drug;
+    public string Drug;
 
     /// <summary>
     /// Цена
@@ -18,8 +18,8 @@ namespace vdrugs
     public Decimal Price;
 
     /// <summary>
-    /// Аптека
+    /// Адрес аптеки
     /// </summary>
-    public string Pharmacy;
+    public string Address;
   }
 }

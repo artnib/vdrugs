@@ -164,6 +164,20 @@ namespace vdrugs
       return options;
     }
 
+    static string[] GetRows(string table)
+    {
+      return table.Split(new string[] { "</tr>" }, StringSplitOptions.None);
+    }
+
+    static List<string> GetCells(string row)
+    {
+      var cells = row.Split(new string[] { "</td>" }, StringSplitOptions.None);
+      var clearCells = new List<string>(cells.Length);
+      for (int i = 0; i < cells.Length; i++)
+        clearCells.Add(ClearCell(cells[i]));
+      return clearCells;
+    }
+
     /// <summary>
     /// Возвращает содержимое ячейки таблицы
     /// </summary>
@@ -244,6 +258,17 @@ namespace vdrugs
       var html = sr.ReadToEnd();
       sr.Close();
       var tableCode = GetTableCode(pstream, "<table class=\"drug_result\"");
+      var rows = GetRows(tableCode);
+      DrugPrice dp;
+      for (int i = 0; i < rows.Length - 2; i++)
+      {
+        var cells = GetCells(rows[i]); //ячейки
+        dp = new DrugPrice {
+          Drug = cells[2],
+          Price = Decimal.Parse(cells[4]),
+          Address = cells[5]
+        };
+      }
       return prices;
     }
   }
