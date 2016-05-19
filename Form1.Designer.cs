@@ -39,6 +39,7 @@
       this.label3 = new System.Windows.Forms.Label();
       this.lbNotFound = new System.Windows.Forms.Label();
       this.btnClear = new System.Windows.Forms.Button();
+      this.btnProcess = new System.Windows.Forms.Button();
       this.SuspendLayout();
       // 
       // tbDrug
@@ -153,11 +154,24 @@
       this.btnClear.UseVisualStyleBackColor = true;
       this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
       // 
+      // btnProcess
+      // 
+      this.btnProcess.AutoSize = true;
+      this.btnProcess.Enabled = false;
+      this.btnProcess.Location = new System.Drawing.Point(208, 340);
+      this.btnProcess.Name = "btnProcess";
+      this.btnProcess.Size = new System.Drawing.Size(104, 23);
+      this.btnProcess.TabIndex = 11;
+      this.btnProcess.Text = "Где всё купить?";
+      this.btnProcess.UseVisualStyleBackColor = true;
+      this.btnProcess.Click += new System.EventHandler(this.button1_Click);
+      // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(413, 412);
+      this.ClientSize = new System.Drawing.Size(413, 375);
+      this.Controls.Add(this.btnProcess);
       this.Controls.Add(this.btnClear);
       this.Controls.Add(this.lbNotFound);
       this.Controls.Add(this.label3);
@@ -191,6 +205,7 @@
     private System.Windows.Forms.Label label3;
     private System.Windows.Forms.Label lbNotFound;
     private System.Windows.Forms.Button btnClear;
+    private System.Windows.Forms.Button btnProcess;
   }
 }
 

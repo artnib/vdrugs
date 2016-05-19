@@ -63,7 +63,7 @@ namespace vdrugs
       if (options.Count == 1)
       {
         lstDrugs.Items.Add(options[0]);
-        btnClear.Enabled = true;
+        EnableSetButtons(true);
       }
       else
         foreach (DrugInfo di in options)
@@ -143,7 +143,7 @@ namespace vdrugs
     {
       lstDrugs.Items.Add(lstOptions.SelectedItem);
       lstOptions.Items.RemoveAt(lstOptions.SelectedIndex);
-      btnClear.Enabled = true;
+      EnableSetButtons(true);
     }
 
     private void lstOptions_SelectedIndexChanged(object sender, EventArgs e)
@@ -161,21 +161,33 @@ namespace vdrugs
       button.Enabled = lst.SelectedIndex != -1;
     }
 
+    void EnableSetButtons(bool enable)
+    {
+      btnClear.Enabled = enable;
+      btnProcess.Enabled = enable;
+    }
+
     private void btnClear_Click(object sender, EventArgs e)
     {
       lstDrugs.Items.Clear();
+      EnableSetButtons(false);
     }
 
     private void btnDel_Click(object sender, EventArgs e)
     {
       lstDrugs.Items.RemoveAt(lstDrugs.SelectedIndex);
-      btnClear.Enabled = lstDrugs.Items.Count > 0;
+      EnableSetButtons(lstDrugs.Items.Count > 0);
     }
 
     private void tbDrug_KeyUp(object sender, KeyEventArgs e)
     {
       if (e.KeyCode == Keys.Return)
         CheckDrug();
+    }
+
+    private void button1_Click(object sender, EventArgs e)
+    {
+
     }
   }
 }
