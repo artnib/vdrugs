@@ -19,6 +19,8 @@ namespace vdrugs
     AutoCompleteStringCollection autoDrugs;
     WebClient wc;
 
+    #region Обработчики событий
+
     private void btnCheck_Click(object sender, EventArgs e)
     {
       CheckDrug();
@@ -31,12 +33,6 @@ namespace vdrugs
         lbNotFound.Visible = false;
     }
 
-    string appDir;
-    string drugFile;
-    string autoFile;
-    int hintCount;
-    const string baseUrl = "http://analit.net";
-
     private void Form1_Load(object sender, EventArgs e)
     {
       appDir = Path.GetDirectoryName(Application.ExecutablePath);
@@ -46,6 +42,84 @@ namespace vdrugs
         autoDrugs.AddRange(File.ReadAllLines(autoFile));
       hintCount = autoDrugs.Count;
     }
+
+    private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+    {
+      if (autoDrugs.Count > hintCount)
+        UpdateHints();
+    }
+
+    private void btnAdd_Click(object sender, EventArgs e)
+    {
+      lstDrugs.Items.Add(lstOptions.SelectedItem);
+      lstOptions.Items.RemoveAt(lstOptions.SelectedIndex);
+      EnableSetButtons(true);
+    }
+
+    private void lstOptions_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      CheckListButton(lstOptions, btnAdd);
+    }
+
+    private void lstDrugs_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      CheckListButton(lstDrugs, btnDel);
+    }
+
+    private void btnClear_Click(object sender, EventArgs e)
+    {
+      lstDrugs.Items.Clear();
+      EnableSetButtons(false);
+    }
+
+    private void btnDel_Click(object sender, EventArgs e)
+    {
+      lstDrugs.Items.RemoveAt(lstDrugs.SelectedIndex);
+      EnableSetButtons(lstDrugs.Items.Count > 0);
+    }
+
+    private void tbDrug_KeyUp(object sender, KeyEventArgs e)
+    {
+      if (e.KeyCode == Keys.Return)
+        CheckDrug();
+    }
+
+    private void btnProcess_Click(object sender, EventArgs e)
+    {
+      drugs = new List<DrugInfo>();
+      DrugInfo di;
+      foreach (object drug in lstDrugs.Items)
+      {
+        di = drug as DrugInfo;
+        drugs.Add(di);
+      }
+      bg.RunWorkerAsync();
+      btnProcess.Enabled = false;
+    }
+
+    private void btnCancel_Click(object sender, EventArgs e)
+    {
+      bg.CancelAsync();
+      btnCancel.Enabled = false;
+    }
+
+    private void bg_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+    {
+      Stream priceStream;
+      foreach (DrugInfo drug in drugs)
+      {
+        priceStream = wc.OpenRead(String.Format("{0}{1}", baseUrl, drug.FindLink));
+
+      }
+    }
+
+    #endregion
+
+    string appDir;
+    string drugFile;
+    string autoFile;
+    int hintCount;
+    const string baseUrl = "http://analit.net";
 
     private void CheckDrug()
     {
@@ -125,35 +199,12 @@ namespace vdrugs
       return link;
     }
 
-    private void Form1_FormClosed(object sender, FormClosedEventArgs e)
-    {
-      if (autoDrugs.Count > hintCount)
-        UpdateHints();
-    }
-
     private void UpdateHints()
     {
       var sw = new StreamWriter(File.OpenWrite(autoFile));
       foreach (string hint in autoDrugs)
         sw.WriteLine(hint);
       sw.Close();
-    }
-
-    private void btnAdd_Click(object sender, EventArgs e)
-    {
-      lstDrugs.Items.Add(lstOptions.SelectedItem);
-      lstOptions.Items.RemoveAt(lstOptions.SelectedIndex);
-      EnableSetButtons(true);
-    }
-
-    private void lstOptions_SelectedIndexChanged(object sender, EventArgs e)
-    {
-      CheckListButton(lstOptions, btnAdd);
-    }
-
-    private void lstDrugs_SelectedIndexChanged(object sender, EventArgs e)
-    {
-      CheckListButton(lstDrugs, btnDel);
     }
 
     void CheckListButton(ListBox lst, Button button)
@@ -167,27 +218,13 @@ namespace vdrugs
       btnProcess.Enabled = enable;
     }
 
-    private void btnClear_Click(object sender, EventArgs e)
-    {
-      lstDrugs.Items.Clear();
-      EnableSetButtons(false);
-    }
+    List<DrugInfo> drugs;
 
-    private void btnDel_Click(object sender, EventArgs e)
+    List<DrugPrice> GetPrices(Stream pstream)
     {
-      lstDrugs.Items.RemoveAt(lstDrugs.SelectedIndex);
-      EnableSetButtons(lstDrugs.Items.Count > 0);
-    }
+      var prices = new List<DrugPrice>();
 
-    private void tbDrug_KeyUp(object sender, KeyEventArgs e)
-    {
-      if (e.KeyCode == Keys.Return)
-        CheckDrug();
-    }
-
-    private void button1_Click(object sender, EventArgs e)
-    {
-
+      return prices;
     }
   }
 }

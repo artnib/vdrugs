@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DrugInfo.cs" />
+    <Compile Include="DrugPrice.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

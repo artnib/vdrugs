@@ -40,6 +40,8 @@
       this.lbNotFound = new System.Windows.Forms.Label();
       this.btnClear = new System.Windows.Forms.Button();
       this.btnProcess = new System.Windows.Forms.Button();
+      this.bg = new System.ComponentModel.BackgroundWorker();
+      this.btnCancel = new System.Windows.Forms.Button();
       this.SuspendLayout();
       // 
       // tbDrug
@@ -164,13 +166,30 @@
       this.btnProcess.TabIndex = 11;
       this.btnProcess.Text = "Где всё купить?";
       this.btnProcess.UseVisualStyleBackColor = true;
-      this.btnProcess.Click += new System.EventHandler(this.button1_Click);
+      this.btnProcess.Click += new System.EventHandler(this.btnProcess_Click);
+      // 
+      // bg
+      // 
+      this.bg.WorkerSupportsCancellation = true;
+      this.bg.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bg_DoWork);
+      // 
+      // btnCancel
+      // 
+      this.btnCancel.Enabled = false;
+      this.btnCancel.Location = new System.Drawing.Point(324, 340);
+      this.btnCancel.Name = "btnCancel";
+      this.btnCancel.Size = new System.Drawing.Size(75, 23);
+      this.btnCancel.TabIndex = 12;
+      this.btnCancel.Text = "Отмена";
+      this.btnCancel.UseVisualStyleBackColor = true;
+      this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
       // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(413, 375);
+      this.Controls.Add(this.btnCancel);
       this.Controls.Add(this.btnProcess);
       this.Controls.Add(this.btnClear);
       this.Controls.Add(this.lbNotFound);
@@ -206,6 +225,8 @@
     private System.Windows.Forms.Label lbNotFound;
     private System.Windows.Forms.Button btnClear;
     private System.Windows.Forms.Button btnProcess;
+    private System.ComponentModel.BackgroundWorker bg;
+    private System.Windows.Forms.Button btnCancel;
   }
 }
 
