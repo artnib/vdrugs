@@ -5,7 +5,7 @@ namespace vdrugs
   /// <summary>
   /// Набор лекарств
   /// </summary>
-  class DrugSet
+  public class DrugSet
   {
     /// <summary>
     /// Адрес аптеки

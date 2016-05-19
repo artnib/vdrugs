@@ -5,7 +5,7 @@ namespace vdrugs
   /// <summary>
   /// Цена лекарства
   /// </summary>
-  class DrugPrice
+  public class DrugPrice
   {
     /// <summary>
     /// Лекарство

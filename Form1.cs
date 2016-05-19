@@ -109,9 +109,11 @@ namespace vdrugs
       List<DrugPrice> prices;
       var pharmacy = new Dictionary<string, List<DrugPrice>>();
       string address;
+      string priceUrl;
       foreach (DrugInfo drug in drugs)
       {
-        priceStream = wc.OpenRead(String.Format("{0}{1}", baseUrl, drug.FindLink));
+        priceUrl = String.Format("{0}{1}", baseUrl, drug.FindLink);
+        priceStream = wc.OpenRead(priceUrl);
         prices = GetPrices(priceStream);
         foreach (DrugPrice dp in prices)
         {
@@ -277,9 +279,9 @@ namespace vdrugs
     List<DrugPrice> GetPrices(Stream pstream)
     {
       var prices = new List<DrugPrice>();
-      var sr = new StreamReader(pstream);
-      var html = sr.ReadToEnd();
-      sr.Close();
+      //var sr = new StreamReader(pstream);
+      //var html = sr.ReadToEnd();
+      //sr.Close();
       var tableCode = GetTableCode(pstream, "<table class=\"drug_result\"");
       var rows = GetRows(tableCode);
       DrugPrice dp;
@@ -295,15 +297,21 @@ namespace vdrugs
       return prices;
     }
 
-     private void bg_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+    ResultForm resultForm;
+
+    private void bg_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
     {
       if (e.Error != null)
         MessageBox.Show(e.Error.Message);
       else
-        if(e.Cancelled)
+        if (e.Cancelled)
           MessageBox.Show("Поиск отменён");
         else
-          MessageBox.Show("Поиск закончен");
+        {
+          if (resultForm == null)
+            resultForm = new ResultForm();
+          resultForm.SetResults((List<DrugSet>)e.Result);
+        }
     }
     
   }
