@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace vdrugs
 {
@@ -8,9 +9,32 @@ namespace vdrugs
   public class DrugSet
   {
     /// <summary>
-    /// Адрес аптеки
+    /// Возвращает адрес аптеки
     /// </summary>
-    public string Address;
+    public string Address
+    {
+      get
+      {
+        if (Drugs.Count > 0)
+          return Drugs[0].Address;
+        else
+          return String.Empty;
+      }
+    }
+
+    /// <summary>
+    /// Возвращает название аптеки
+    /// </summary>
+    public string Pharmacy
+    {
+      get
+      {
+        if (Drugs.Count > 0)
+          return Drugs[0].Pharmacy;
+        else
+          return String.Empty;
+      }
+    }
 
     /// <summary>
     /// Лекарства

@@ -29,14 +29,15 @@
     private void InitializeComponent()
     {
       this.dgvResults = new System.Windows.Forms.DataGridView();
-      this.colTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.colAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.dgvDrugs = new System.Windows.Forms.DataGridView();
       this.colPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.splitContainer1 = new System.Windows.Forms.SplitContainer();
       this.colAddress2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.colPharmacy2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.colTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.colAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.colPharmacy = new System.Windows.Forms.DataGridViewTextBoxColumn();
       ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dgvDrugs)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -47,11 +48,13 @@
       // 
       // dgvResults
       // 
+      this.dgvResults.AllowUserToAddRows = false;
       this.dgvResults.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
       this.dgvResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
       this.dgvResults.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colTotal,
-            this.colAddress});
+            this.colAddress,
+            this.colPharmacy});
       this.dgvResults.Dock = System.Windows.Forms.DockStyle.Fill;
       this.dgvResults.Location = new System.Drawing.Point(0, 0);
       this.dgvResults.MultiSelect = false;
@@ -62,22 +65,9 @@
       this.dgvResults.TabIndex = 0;
       this.dgvResults.SelectionChanged += new System.EventHandler(this.dgvResults_SelectionChanged);
       // 
-      // colTotal
-      // 
-      this.colTotal.HeaderText = "Стоимость";
-      this.colTotal.Name = "colTotal";
-      this.colTotal.ReadOnly = true;
-      this.colTotal.Width = 87;
-      // 
-      // colAddress
-      // 
-      this.colAddress.HeaderText = "Адрес аптеки";
-      this.colAddress.Name = "colAddress";
-      this.colAddress.ReadOnly = true;
-      this.colAddress.Width = 101;
-      // 
       // dgvDrugs
       // 
+      this.dgvDrugs.AllowUserToAddRows = false;
       this.dgvDrugs.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
       this.dgvDrugs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
       this.dgvDrugs.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -141,6 +131,27 @@
       this.colPharmacy2.ReadOnly = true;
       this.colPharmacy2.Width = 68;
       // 
+      // colTotal
+      // 
+      this.colTotal.HeaderText = "Стоимость";
+      this.colTotal.Name = "colTotal";
+      this.colTotal.ReadOnly = true;
+      this.colTotal.Width = 87;
+      // 
+      // colAddress
+      // 
+      this.colAddress.HeaderText = "Адрес";
+      this.colAddress.Name = "colAddress";
+      this.colAddress.ReadOnly = true;
+      this.colAddress.Width = 63;
+      // 
+      // colPharmacy
+      // 
+      this.colPharmacy.HeaderText = "Аптека";
+      this.colPharmacy.Name = "colPharmacy";
+      this.colPharmacy.ReadOnly = true;
+      this.colPharmacy.Width = 68;
+      // 
       // ResultForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -162,13 +173,14 @@
     #endregion
 
     private System.Windows.Forms.DataGridView dgvResults;
-    private System.Windows.Forms.DataGridViewTextBoxColumn colTotal;
-    private System.Windows.Forms.DataGridViewTextBoxColumn colAddress;
     private System.Windows.Forms.DataGridView dgvDrugs;
     private System.Windows.Forms.DataGridViewTextBoxColumn colPrice;
     private System.Windows.Forms.DataGridViewTextBoxColumn colName;
     private System.Windows.Forms.SplitContainer splitContainer1;
     private System.Windows.Forms.DataGridViewTextBoxColumn colAddress2;
     private System.Windows.Forms.DataGridViewTextBoxColumn colPharmacy2;
+    private System.Windows.Forms.DataGridViewTextBoxColumn colTotal;
+    private System.Windows.Forms.DataGridViewTextBoxColumn colAddress;
+    private System.Windows.Forms.DataGridViewTextBoxColumn colPharmacy;
   }
 }

@@ -130,7 +130,6 @@ namespace vdrugs
         {
           ds = new DrugSet
           {
-            Address = addr,
             Drugs = pharm[addr]
           };
           drugSets.Add(ds);
