@@ -61,7 +61,7 @@
       this.dgvResults.Name = "dgvResults";
       this.dgvResults.ReadOnly = true;
       this.dgvResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-      this.dgvResults.Size = new System.Drawing.Size(524, 223);
+      this.dgvResults.Size = new System.Drawing.Size(584, 223);
       this.dgvResults.TabIndex = 0;
       this.dgvResults.SelectionChanged += new System.EventHandler(this.dgvResults_SelectionChanged);
       // 
@@ -81,7 +81,7 @@
       this.dgvDrugs.Name = "dgvDrugs";
       this.dgvDrugs.ReadOnly = true;
       this.dgvDrugs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-      this.dgvDrugs.Size = new System.Drawing.Size(524, 220);
+      this.dgvDrugs.Size = new System.Drawing.Size(584, 220);
       this.dgvDrugs.TabIndex = 1;
       // 
       // colPrice
@@ -113,7 +113,7 @@
       // splitContainer1.Panel2
       // 
       this.splitContainer1.Panel2.Controls.Add(this.dgvDrugs);
-      this.splitContainer1.Size = new System.Drawing.Size(524, 447);
+      this.splitContainer1.Size = new System.Drawing.Size(584, 447);
       this.splitContainer1.SplitterDistance = 223;
       this.splitContainer1.TabIndex = 2;
       // 
@@ -156,7 +156,7 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(524, 447);
+      this.ClientSize = new System.Drawing.Size(584, 447);
       this.Controls.Add(this.splitContainer1);
       this.Name = "ResultForm";
       this.Text = "Результаты поиска";

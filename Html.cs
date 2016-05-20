@@ -44,6 +44,16 @@ namespace vdrugs
     }
 
     /// <summary>
+    /// Начало атрибута href
+    /// </summary>
+    public static readonly string HrefStart = "href=\"";
+
+    /// <summary>
+    /// Кавычка
+    /// </summary>
+    public static readonly string Quote = "\"";
+
+    /// <summary>
     /// Возвращает содержимое ячейки таблицы
     /// </summary>
     /// <param name="cell">Код ячейки</param>

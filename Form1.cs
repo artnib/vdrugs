@@ -106,7 +106,6 @@ namespace vdrugs
     private void bg_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
     {
       Stream priceStream;
-      List<DrugPrice> prices;
       var pharm = new Dictionary<string, List<DrugPrice>>();
       string pharmacy;
       string priceUrl;
@@ -114,7 +113,9 @@ namespace vdrugs
       {
         priceUrl = String.Format("{0}{1}", baseUrl, drug.FindLink);
         priceStream = wc.OpenRead(priceUrl);
-        prices = GetPrices(priceStream);
+        prices = new List<DrugPrice>();
+        pageLinks = new List<string>();
+        GetPrices(priceStream);
         foreach (DrugPrice dp in prices)
         {
           pharmacy = dp.Pharmacy;
@@ -253,7 +254,7 @@ namespace vdrugs
     /// <param name="stream">Поток с кодом HTML</param>
     /// <param name="tableTag">Открывающий тег таблицы</param>
     /// <returns>Код тела таблицы</returns>
-    string GetTableCode(Stream stream, string tableTag)
+    static string GetTableCode(Stream stream, string tableTag)
     {
       var code = String.Empty;
       var sr = new StreamReader(stream);
@@ -274,9 +275,8 @@ namespace vdrugs
     /// </summary>
     /// <param name="pstream">Поток с ценами</param>
     /// <returns>Список цен</returns>
-    List<DrugPrice> GetPrices(Stream pstream)
+    void GetPrices(Stream pstream)
     {
-      var prices = new List<DrugPrice>();
       var tableCode = GetTableCode(pstream, "<table class=\"drug_result\"");
       var rows = Html.GetRows(tableCode);
       DrugPrice dp;
@@ -291,8 +291,40 @@ namespace vdrugs
         };
         prices.Add(dp);
       }
-      return prices;
+      if (pageLinks.Count > 0) return;
+      //последняя строка таблицы со ссылками на страницы с ценами
+      var lastRow = rows[rows.Length - 2];
+      int hrefPos = 0;
+      int quotePos = 0;
+      int linkStart;
+      string nextLink;
+      while ((hrefPos = lastRow.IndexOf(Html.HrefStart, quotePos)) != -1)
+      {
+        linkStart = hrefPos + Html.HrefStart.Length;
+        quotePos = lastRow.IndexOf(Html.Quote, linkStart);
+        if (quotePos != -1)
+        {
+          nextLink = lastRow.Substring(linkStart, quotePos - linkStart);
+          if (!pageLinks.Contains(nextLink))
+          {
+            pageLinks.Add(nextLink);
+            GetPrices(wc.OpenRead(baseUrl + nextLink));
+          }
+          else
+            break;
+        }
+      }
     }
+
+    /// <summary>
+    /// Цены на лекарство
+    /// </summary>
+    List<DrugPrice> prices;
+
+    /// <summary>
+    /// Ссылки на страницы с ценами
+    /// </summary>
+    List<string> pageLinks;
 
     ResultForm resultForm;
    
