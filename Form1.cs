@@ -101,6 +101,7 @@ namespace vdrugs
       }
       bg.RunWorkerAsync();
       btnProcess.Enabled = false;
+      btnCancel.Enabled = true;
     }
 
     private void btnCancel_Click(object sender, EventArgs e)
@@ -164,6 +165,7 @@ namespace vdrugs
             resultForm.ShowDialog(this);
           }
         }
+      btnProcess.Enabled = true;
     }
     #endregion
 
