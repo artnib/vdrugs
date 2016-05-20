@@ -37,6 +37,20 @@ namespace vdrugs
     }
 
     /// <summary>
+    /// Возвращает телефон аптеки
+    /// </summary>
+    public string Phone
+    {
+      get
+      {
+        if (Drugs.Count > 0)
+          return Drugs[0].Phone;
+        else
+          return String.Empty;
+      }
+    }
+
+    /// <summary>
     /// Лекарства
     /// </summary>
     public List<DrugPrice> Drugs;

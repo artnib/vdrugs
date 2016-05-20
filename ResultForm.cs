@@ -20,7 +20,7 @@ namespace vdrugs
       foreach (DrugSet ds in drugSets)
       {
         index = dgvResults.Rows.Add(new object[] {
-          ds.Total, ds.Address,ds.Pharmacy });
+          ds.Total, ds.Address, ds.Pharmacy, ds.Phone });
         dgvResults.Rows[index].Tag = ds;
       }
     }

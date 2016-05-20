@@ -134,7 +134,7 @@ namespace vdrugs
       DrugSet ds;
       var drugSets = new List<DrugSet>();
       foreach(string addr in pharm.Keys)
-        if (pharm[addr].Count == drugs.Count) //есть все нужные лекарства
+        if (pharm[addr].Count >= drugs.Count) //есть все нужные лекарства
         {
           ds = new DrugSet
           {
@@ -295,7 +295,8 @@ namespace vdrugs
           Pharmacy = Html.RemoveTags(cells[0]),
           Drug = cells[2],
           Price = Decimal.Parse(cells[4]),
-          Address = cells[5]
+          Address = cells[5],
+          Phone = cells[6]
         };
         prices.Add(dp);
       }
