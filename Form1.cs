@@ -137,7 +137,28 @@ namespace vdrugs
         }
       e.Result = drugSets;
     }
-
+    
+    private void bg_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+    {
+      if (e.Error != null)
+        MessageBox.Show(e.Error.Message);
+      else
+        if (e.Cancelled)
+          MessageBox.Show("Поиск отменён");
+        else
+        {
+          var results = (List<DrugSet>)e.Result;
+          if (results.Count == 0)
+            MessageBox.Show("Ни в одной аптеке нет заданного сочетания лекарств");
+          else
+          {
+            if (resultForm == null)
+              resultForm = new ResultForm();
+            resultForm.SetResults(results);
+            resultForm.ShowDialog(this);
+          }
+        }
+    }
     #endregion
 
     string appDir;
@@ -180,40 +201,17 @@ namespace vdrugs
         DrugInfo di;
         for (int i = 0; i < rows.Length - 2; i++)
         {
-          var cells = rows[i].Split(td, StringSplitOptions.None); //ячейки
+          var cells = Html.GetCells(rows[i]);
           di = new DrugInfo {
             Name = tbDrug.Text,
-            FindLink = GetFindLink(ClearCell(cells[1])),
-            Option = ClearCell(cells[2]) };
+            FindLink = GetFindLink(cells[1]),
+            Option = cells[2]
+          };
           options.Add(di);
         }
       return options;
     }
-
-    static string[] GetRows(string table)
-    {
-      return table.Split(new string[] { "</tr>" }, StringSplitOptions.None);
-    }
-
-    static List<string> GetCells(string row)
-    {
-      var cells = row.Split(new string[] { "</td>" }, StringSplitOptions.None);
-      var clearCells = new List<string>(cells.Length);
-      for (int i = 0; i < cells.Length; i++)
-        clearCells.Add(ClearCell(cells[i]));
-      return clearCells;
-    }
-
-    /// <summary>
-    /// Возвращает содержимое ячейки таблицы
-    /// </summary>
-    /// <param name="cell">Код ячейки</param>
-    /// <returns>Содержимое ячейки</returns>
-    static string ClearCell(string cell)
-    {
-      return cell.Replace("<td>", String.Empty).Trim();
-    }
-
+    
     static string GetFindLink(string cell)
     {
       var link = String.Empty;
@@ -281,13 +279,13 @@ namespace vdrugs
     {
       var prices = new List<DrugPrice>();
       var tableCode = GetTableCode(pstream, "<table class=\"drug_result\"");
-      var rows = GetRows(tableCode);
+      var rows = Html.GetRows(tableCode);
       DrugPrice dp;
       for (int i = 0; i < rows.Length - 2; i++)
       {
-        var cells = GetCells(rows[i]); //ячейки
+        var cells = Html.GetCells(rows[i]);
         dp = new DrugPrice {
-          Pharmacy = cells[0],
+          Pharmacy = Html.RemoveTags(cells[0]),
           Drug = cells[2],
           Price = Decimal.Parse(cells[4]),
           Address = cells[5]
@@ -298,28 +296,6 @@ namespace vdrugs
     }
 
     ResultForm resultForm;
-
-    private void bg_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-    {
-      if (e.Error != null)
-        MessageBox.Show(e.Error.Message);
-      else
-        if (e.Cancelled)
-          MessageBox.Show("Поиск отменён");
-        else
-        {
-          var results = (List<DrugSet>)e.Result;
-          if (results.Count == 0)
-            MessageBox.Show("Ни в одной аптеке нет заданного сочетания лекарств");
-          else
-          {
-            if (resultForm == null)
-              resultForm = new ResultForm();
-            resultForm.SetResults(results);
-            resultForm.ShowDialog(this);
-          }
-        }
-    }
-    
+   
   }
 }
