@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using vdrugs.Properties;
 
 namespace vdrugs
 {
@@ -42,6 +37,38 @@ namespace vdrugs
           dgvDrugs.Rows.Add(new object[] {
             dp.Price, dp.Drug, dp.Address, dp.Pharmacy });
       }
+    }
+
+    private void ResultForm_FormClosed(object sender, FormClosedEventArgs e)
+    {
+      var maximized = WindowState == FormWindowState.Maximized;
+      Settings.Default.ResultSplitter = splitContainer1.SplitterDistance;
+      Settings.Default.ResultMaximized = maximized;
+      if (!maximized)
+      {
+        Settings.Default.ResultHeight = Height;
+        Settings.Default.ResultLeft = Left;
+        Settings.Default.ResultTop = Top;
+        Settings.Default.ResultWidth = Width;
+      }
+    }
+
+    private void ResultForm_Load(object sender, EventArgs e)
+    {
+      Visible = false;
+      var maximized = Settings.Default.ResultMaximized;
+      if (maximized)
+        WindowState = FormWindowState.Maximized;
+      else
+      {
+        Left = Settings.Default.ResultLeft;
+        Top = Settings.Default.ResultTop;
+        Width = Settings.Default.ResultWidth;
+        Height = Settings.Default.ResultHeight;
+      }
+      var distance = Settings.Default.ResultSplitter;
+      splitContainer1.SplitterDistance = distance == 0 ? splitContainer1.SplitterDistance: distance;
+      Visible = true;
     }
   }
 }

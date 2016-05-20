@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Net;
 using System.IO;
+using vdrugs.Properties;
 
 namespace vdrugs
 {
@@ -35,6 +36,10 @@ namespace vdrugs
 
     private void Form1_Load(object sender, EventArgs e)
     {
+      //прячем форму, чтобы не "прыгала" при восстановлении положения
+      Visible = false; 
+      RestoreSettings();
+      Visible = true;
       appDir = Path.GetDirectoryName(Application.ExecutablePath);
       drugFile = Path.Combine(appDir, "drug.htm");
       autoFile = Path.Combine(appDir, "hints.txt");
@@ -47,6 +52,7 @@ namespace vdrugs
     {
       if (autoDrugs.Count > hintCount)
         UpdateHints();
+      SaveSettings();
     }
 
     private void btnAdd_Click(object sender, EventArgs e)
@@ -327,6 +333,19 @@ namespace vdrugs
     List<string> pageLinks;
 
     ResultForm resultForm;
-   
+
+    void SaveSettings()
+    {
+      Settings.Default.MainLeft = Left;
+      Settings.Default.MainTop = Top;
+      Settings.Default.Save();
+    }
+
+    void RestoreSettings()
+    {
+      Left = Settings.Default.MainLeft;
+      Top = Settings.Default.MainTop;
+    }
+
   }
 }

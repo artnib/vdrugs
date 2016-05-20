@@ -22,5 +22,101 @@ namespace vdrugs.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int MainLeft {
+            get {
+                return ((int)(this["MainLeft"]));
+            }
+            set {
+                this["MainLeft"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int MainTop {
+            get {
+                return ((int)(this["MainTop"]));
+            }
+            set {
+                this["MainTop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ResultLeft {
+            get {
+                return ((int)(this["ResultLeft"]));
+            }
+            set {
+                this["ResultLeft"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ResultTop {
+            get {
+                return ((int)(this["ResultTop"]));
+            }
+            set {
+                this["ResultTop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("600")]
+        public int ResultWidth {
+            get {
+                return ((int)(this["ResultWidth"]));
+            }
+            set {
+                this["ResultWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        public int ResultHeight {
+            get {
+                return ((int)(this["ResultHeight"]));
+            }
+            set {
+                this["ResultHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ResultMaximized {
+            get {
+                return ((bool)(this["ResultMaximized"]));
+            }
+            set {
+                this["ResultMaximized"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ResultSplitter {
+            get {
+                return ((int)(this["ResultSplitter"]));
+            }
+            set {
+                this["ResultSplitter"] = value;
+            }
+        }
     }
 }

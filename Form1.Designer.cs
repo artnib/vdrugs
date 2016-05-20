@@ -203,6 +203,8 @@
       this.Controls.Add(this.btnAdd);
       this.Controls.Add(this.label1);
       this.Controls.Add(this.tbDrug);
+      this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+      this.MaximizeBox = false;
       this.Name = "Form1";
       this.Text = "Поиск лекарств в Воронеже";
       this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);

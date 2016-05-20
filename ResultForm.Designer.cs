@@ -29,15 +29,15 @@
     private void InitializeComponent()
     {
       this.dgvResults = new System.Windows.Forms.DataGridView();
-      this.dgvDrugs = new System.Windows.Forms.DataGridView();
-      this.colPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-      this.colAddress2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.colPharmacy2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.colTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.colAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.colPharmacy = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.dgvDrugs = new System.Windows.Forms.DataGridView();
+      this.colPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.colAddress2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.colPharmacy2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.splitContainer1 = new System.Windows.Forms.SplitContainer();
       ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dgvDrugs)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -64,6 +64,27 @@
       this.dgvResults.Size = new System.Drawing.Size(584, 223);
       this.dgvResults.TabIndex = 0;
       this.dgvResults.SelectionChanged += new System.EventHandler(this.dgvResults_SelectionChanged);
+      // 
+      // colTotal
+      // 
+      this.colTotal.HeaderText = "Стоимость";
+      this.colTotal.Name = "colTotal";
+      this.colTotal.ReadOnly = true;
+      this.colTotal.Width = 87;
+      // 
+      // colAddress
+      // 
+      this.colAddress.HeaderText = "Адрес";
+      this.colAddress.Name = "colAddress";
+      this.colAddress.ReadOnly = true;
+      this.colAddress.Width = 63;
+      // 
+      // colPharmacy
+      // 
+      this.colPharmacy.HeaderText = "Аптека";
+      this.colPharmacy.Name = "colPharmacy";
+      this.colPharmacy.ReadOnly = true;
+      this.colPharmacy.Width = 68;
       // 
       // dgvDrugs
       // 
@@ -98,10 +119,23 @@
       this.colName.ReadOnly = true;
       this.colName.Width = 87;
       // 
+      // colAddress2
+      // 
+      this.colAddress2.HeaderText = "Адрес";
+      this.colAddress2.Name = "colAddress2";
+      this.colAddress2.ReadOnly = true;
+      this.colAddress2.Width = 63;
+      // 
+      // colPharmacy2
+      // 
+      this.colPharmacy2.HeaderText = "Аптека";
+      this.colPharmacy2.Name = "colPharmacy2";
+      this.colPharmacy2.ReadOnly = true;
+      this.colPharmacy2.Width = 68;
+      // 
       // splitContainer1
       // 
       this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
       this.splitContainer1.Location = new System.Drawing.Point(0, 0);
       this.splitContainer1.Name = "splitContainer1";
       this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -117,41 +151,6 @@
       this.splitContainer1.SplitterDistance = 223;
       this.splitContainer1.TabIndex = 2;
       // 
-      // colAddress2
-      // 
-      this.colAddress2.HeaderText = "Адрес";
-      this.colAddress2.Name = "colAddress2";
-      this.colAddress2.ReadOnly = true;
-      this.colAddress2.Width = 63;
-      // 
-      // colPharmacy2
-      // 
-      this.colPharmacy2.HeaderText = "Аптека";
-      this.colPharmacy2.Name = "colPharmacy2";
-      this.colPharmacy2.ReadOnly = true;
-      this.colPharmacy2.Width = 68;
-      // 
-      // colTotal
-      // 
-      this.colTotal.HeaderText = "Стоимость";
-      this.colTotal.Name = "colTotal";
-      this.colTotal.ReadOnly = true;
-      this.colTotal.Width = 87;
-      // 
-      // colAddress
-      // 
-      this.colAddress.HeaderText = "Адрес";
-      this.colAddress.Name = "colAddress";
-      this.colAddress.ReadOnly = true;
-      this.colAddress.Width = 63;
-      // 
-      // colPharmacy
-      // 
-      this.colPharmacy.HeaderText = "Аптека";
-      this.colPharmacy.Name = "colPharmacy";
-      this.colPharmacy.ReadOnly = true;
-      this.colPharmacy.Width = 68;
-      // 
       // ResultForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -160,6 +159,8 @@
       this.Controls.Add(this.splitContainer1);
       this.Name = "ResultForm";
       this.Text = "Результаты поиска";
+      this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ResultForm_FormClosed);
+      this.Load += new System.EventHandler(this.ResultForm_Load);
       ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.dgvDrugs)).EndInit();
       this.splitContainer1.Panel1.ResumeLayout(false);
