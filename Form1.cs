@@ -107,8 +107,8 @@ namespace vdrugs
     {
       Stream priceStream;
       List<DrugPrice> prices;
-      var pharmacy = new Dictionary<string, List<DrugPrice>>();
-      string address;
+      var pharm = new Dictionary<string, List<DrugPrice>>();
+      string pharmacy;
       string priceUrl;
       foreach (DrugInfo drug in drugs)
       {
@@ -117,21 +117,21 @@ namespace vdrugs
         prices = GetPrices(priceStream);
         foreach (DrugPrice dp in prices)
         {
-          address = dp.Address;
-          if (!pharmacy.ContainsKey(address))
-            pharmacy.Add(address, new List<DrugPrice>());
-          pharmacy[address].Add(dp);
+          pharmacy = dp.Pharmacy;
+          if (!pharm.ContainsKey(pharmacy))
+            pharm.Add(pharmacy, new List<DrugPrice>());
+          pharm[pharmacy].Add(dp);
         }
       }
       DrugSet ds;
       var drugSets = new List<DrugSet>();
-      foreach(string addr in pharmacy.Keys)
-        if (pharmacy[addr].Count == drugs.Count) //есть все нужные лекарства
+      foreach(string addr in pharm.Keys)
+        if (pharm[addr].Count == drugs.Count) //есть все нужные лекарства
         {
           ds = new DrugSet
           {
             Address = addr,
-            Drugs = pharmacy[addr]
+            Drugs = pharm[addr]
           };
           drugSets.Add(ds);
         }
@@ -287,6 +287,7 @@ namespace vdrugs
       {
         var cells = GetCells(rows[i]); //ячейки
         dp = new DrugPrice {
+          Pharmacy = cells[0],
           Drug = cells[2],
           Price = Decimal.Parse(cells[4]),
           Address = cells[5]
@@ -309,12 +310,14 @@ namespace vdrugs
         {
           var results = (List<DrugSet>)e.Result;
           if (results.Count == 0)
-            MessageBox.Show("Ни в одной аптеке нет заданного сочетания лекарств"); 
+            MessageBox.Show("Ни в одной аптеке нет заданного сочетания лекарств");
           else
+          {
             if (resultForm == null)
               resultForm = new ResultForm();
             resultForm.SetResults(results);
             resultForm.ShowDialog(this);
+          }
         }
     }
     

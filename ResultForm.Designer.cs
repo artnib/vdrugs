@@ -36,6 +36,7 @@
       this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.splitContainer1 = new System.Windows.Forms.SplitContainer();
       this.colAddress2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.colPharmacy2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
       ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dgvDrugs)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -82,7 +83,8 @@
       this.dgvDrugs.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colPrice,
             this.colName,
-            this.colAddress2});
+            this.colAddress2,
+            this.colPharmacy2});
       this.dgvDrugs.Dock = System.Windows.Forms.DockStyle.Fill;
       this.dgvDrugs.Location = new System.Drawing.Point(0, 0);
       this.dgvDrugs.MultiSelect = false;
@@ -132,6 +134,13 @@
       this.colAddress2.ReadOnly = true;
       this.colAddress2.Width = 63;
       // 
+      // colPharmacy2
+      // 
+      this.colPharmacy2.HeaderText = "Аптека";
+      this.colPharmacy2.Name = "colPharmacy2";
+      this.colPharmacy2.ReadOnly = true;
+      this.colPharmacy2.Width = 68;
+      // 
       // ResultForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -160,5 +169,6 @@
     private System.Windows.Forms.DataGridViewTextBoxColumn colName;
     private System.Windows.Forms.SplitContainer splitContainer1;
     private System.Windows.Forms.DataGridViewTextBoxColumn colAddress2;
+    private System.Windows.Forms.DataGridViewTextBoxColumn colPharmacy2;
   }
 }

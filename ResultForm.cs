@@ -38,7 +38,8 @@ namespace vdrugs
         var ds = (DrugSet)dgvResults.SelectedRows[0].Tag;
         dgvDrugs.Rows.Clear();
         foreach (DrugPrice dp in ds.Drugs)
-          dgvDrugs.Rows.Add(new object[] { dp.Price, dp.Drug, dp.Address });
+          dgvDrugs.Rows.Add(new object[] {
+            dp.Price, dp.Drug, dp.Address, dp.Pharmacy });
       }
     }
   }

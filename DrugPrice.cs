@@ -21,5 +21,10 @@ namespace vdrugs
     /// Адрес аптеки
     /// </summary>
     public string Address;
+
+    /// <summary>
+    /// Аптека
+    /// </summary>
+    public string Pharmacy;
   }
 }
