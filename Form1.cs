@@ -148,6 +148,7 @@ namespace vdrugs
 
     private void CheckDrug()
     {
+      lstOptions.Items.Clear();
       const String drugFmt = "{1}/apteka/Main/SearchResult?filter.query={0}&filter.region=1099511627776";
       var url = String.Format(drugFmt, tbDrug.Text, baseUrl);
       var drugStream = wc.OpenRead(url);
@@ -306,10 +307,14 @@ namespace vdrugs
           MessageBox.Show("Поиск отменён");
         else
         {
-          if (resultForm == null)
-            resultForm = new ResultForm();
-          resultForm.SetResults((List<DrugSet>)e.Result);
-          resultForm.ShowDialog(this);
+          var results = (List<DrugSet>)e.Result;
+          if (results.Count == 0)
+            MessageBox.Show("Ни в одной аптеке нет заданного сочетания лекарств"); 
+          else
+            if (resultForm == null)
+              resultForm = new ResultForm();
+            resultForm.SetResults(results);
+            resultForm.ShowDialog(this);
         }
     }
     
