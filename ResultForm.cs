@@ -21,10 +21,25 @@ namespace vdrugs
     {
       this.drugSets = drugSets;
       dgvResults.Rows.Clear();
+      int index;
       foreach (DrugSet ds in drugSets)
-        dgvResults.Rows.Add(new object[] { ds.Total, ds.Address });
+      {
+        index = dgvResults.Rows.Add(new object[] { ds.Total, ds.Address });
+        dgvResults.Rows[index].Tag = ds;
+      }
     }
 
     List<DrugSet> drugSets;
+
+    private void dgvResults_SelectionChanged(object sender, EventArgs e)
+    {
+      if (dgvResults.SelectedRows.Count > 0)
+      {
+        var ds = (DrugSet)dgvResults.SelectedRows[0].Tag;
+        dgvDrugs.Rows.Clear();
+        foreach (DrugPrice dp in ds.Drugs)
+          dgvDrugs.Rows.Add(new object[] { dp.Price, dp.Drug });
+      }
+    }
   }
 }
