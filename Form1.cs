@@ -121,6 +121,7 @@ namespace vdrugs
         priceUrl = String.Format("{0}{1}", baseUrl, drug.FindLink);
         priceStream = wc.OpenRead(priceUrl);
         prices = new List<DrugPrice>();
+        dups = new List<DrugPrice>();
         pageLinks = new List<string>();
         GetPrices(priceStream);
         foreach (DrugPrice dp in prices)
@@ -128,13 +129,16 @@ namespace vdrugs
           pharmacy = dp.Pharmacy;
           if (!pharm.ContainsKey(pharmacy))
             pharm.Add(pharmacy, new List<DrugPrice>());
-          pharm[pharmacy].Add(dp);
+          if (pharm[pharmacy].Find(p => p.Drug == dp.Drug) == null)
+            pharm[pharmacy].Add(dp);
+          else //в этой аптеке это лекарство есть по другой цене
+            dups.Add(dp);
         }
       }
       DrugSet ds;
       var drugSets = new List<DrugSet>();
       foreach(string addr in pharm.Keys)
-        if (pharm[addr].Count >= drugs.Count) //есть все нужные лекарства
+        if (pharm[addr].Count == drugs.Count) //есть все нужные лекарства
         {
           ds = new DrugSet
           {
@@ -142,6 +146,34 @@ namespace vdrugs
           };
           drugSets.Add(ds);
         }
+      
+      foreach (DrugPrice dup in dups)
+      {
+        var twins = drugSets.FindAll(d => d.Pharmacy == dup.Pharmacy);
+        foreach (DrugSet twin in twins)
+        {
+          ds = new DrugSet { Drugs = new List<DrugPrice>(twin.Drugs.Count) };
+          foreach (DrugPrice dprice in twin.Drugs)
+          {
+            if (dprice.Drug == dup.Drug) //дубликат с другой ценой
+            {
+              //делаем копию
+              ds.Drugs.Add(new DrugPrice
+              {
+                Drug = dprice.Drug,
+                Address = dprice.Address,
+                Pharmacy = dprice.Pharmacy,
+                Phone = dprice.Phone,
+                Price = dup.Price
+              });
+            }
+            else //остальные лекарства
+              ds.Drugs.Add(dprice); //используем ссылку
+          }
+          drugSets.Add(ds);
+        }
+      }
+      
       e.Result = drugSets;
     }
     
@@ -326,9 +358,14 @@ namespace vdrugs
     }
 
     /// <summary>
-    /// Цены на лекарство
+    /// Все цены на лекарство
     /// </summary>
     List<DrugPrice> prices;
+
+    /// <summary>
+    /// Альтернативные цены на одно и то же лекарство в одной аптеке
+    /// </summary>
+    List<DrugPrice> dups;
 
     /// <summary>
     /// Ссылки на страницы с ценами
