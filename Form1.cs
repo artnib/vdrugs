@@ -37,7 +37,7 @@ namespace vdrugs
     private void Form1_Load(object sender, EventArgs e)
     {
       //прячем форму, чтобы не "прыгала" при восстановлении положения
-      Visible = false; 
+      Visible = false;
       RestoreSettings();
       Visible = true;
       appDir = Path.GetDirectoryName(Application.ExecutablePath);
@@ -116,6 +116,7 @@ namespace vdrugs
       var pharm = new Dictionary<string, List<DrugPrice>>();
       string pharmacy;
       string priceUrl;
+
       foreach (DrugInfo drug in drugs)
       {
         priceUrl = String.Format("{0}{1}", baseUrl, drug.FindLink);
@@ -139,13 +140,13 @@ namespace vdrugs
       var drugSets = new List<DrugSet>();
       foreach(string addr in pharm.Keys)
         if (pharm[addr].Count == drugs.Count) //есть все нужные лекарства
+      {
+        ds = new DrugSet
         {
-          ds = new DrugSet
-          {
-            Drugs = pharm[addr]
-          };
-          drugSets.Add(ds);
-        }
+          Drugs = pharm[addr]
+        };
+        drugSets.Add(ds);
+      }
       
       foreach (DrugPrice dup in dups)
       {
@@ -159,13 +160,13 @@ namespace vdrugs
             {
               //делаем копию
               ds.Drugs.Add(new DrugPrice
-              {
-                Drug = dprice.Drug,
-                Address = dprice.Address,
-                Pharmacy = dprice.Pharmacy,
-                Phone = dprice.Phone,
-                Price = dup.Price
-              });
+                           {
+                             Drug = dprice.Drug,
+                             Address = dprice.Address,
+                             Pharmacy = dprice.Pharmacy,
+                             Phone = dprice.Phone,
+                             Price = dup.Price
+                           });
             }
             else //остальные лекарства
               ds.Drugs.Add(dprice); //используем ссылку
@@ -180,7 +181,12 @@ namespace vdrugs
     private void bg_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
     {
       if (e.Error != null)
-        MessageBox.Show(e.Error.Message);
+      {
+        if (e.Error is WebException)
+          MessageBox.Show(GetErrorMsg((WebException)e.Error));
+        else
+          MessageBox.Show(e.Error.Message);
+      }
       else
         if (e.Cancelled)
           MessageBox.Show("Поиск отменён");
@@ -197,7 +203,7 @@ namespace vdrugs
             resultForm.ShowDialog(this);
           }
         }
-      btnProcess.Enabled = true;
+        btnProcess.Enabled = true;
     }
     #endregion
 
@@ -212,43 +218,77 @@ namespace vdrugs
       lstOptions.Items.Clear();
       const String drugFmt = "{1}/apteka/Main/SearchResult?filter.query={0}&filter.region=1099511627776";
       var url = String.Format(drugFmt, tbDrug.Text, baseUrl);
-      var drugStream = wc.OpenRead(url);
-      var options = GetOptions(drugStream);
-      if (options.Count == 0) //ничего не найдено
+      try
       {
-        lbNotFound.Visible = true;
-        return;
+        var drugStream = wc.OpenRead(url);
+        var options = GetOptions(drugStream);
+        if (options.Count == 0) //ничего не найдено
+        {
+          lbNotFound.Visible = true;
+          return;
+        }
+        if (!autoDrugs.Contains(tbDrug.Text))
+          autoDrugs.Add(tbDrug.Text);
+        if (options.Count == 1)
+        {
+          lstDrugs.Items.Add(options[0]);
+          EnableSetButtons(true);
+        }
+        else
+          foreach (DrugInfo di in options)
+            lstOptions.Items.Add(di);
       }
-      if (!autoDrugs.Contains(tbDrug.Text))
-        autoDrugs.Add(tbDrug.Text);
-      if (options.Count == 1)
+      catch (WebException we)
       {
-        lstDrugs.Items.Add(options[0]);
-        EnableSetButtons(true);
+        MessageBox.Show(GetErrorMsg(we), Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
-      else
-        foreach (DrugInfo di in options)
-          lstOptions.Items.Add(di);
     }
 
+    /// <summary>
+    /// Возвращает сообщение об ошибке
+    /// </summary>
+    /// <param name="we">Исключение</param>
+    /// <returns>Сообщение об ошибке</returns>
+    static string GetErrorMsg(WebException we)
+    {
+      string msg;
+      switch (we.Status) {
+        case WebExceptionStatus.NameResolutionFailure:
+          msg = String.Format("Не удалось разрешить имя '{0}'.", baseUrl) + " Проверьте исправность подключения к Интернету.";
+          break;
+        case WebExceptionStatus.ConnectFailure:
+          msg = "Не удалось подключиться к серверу." + " Попробуйте повторить поиск через некоторое время.";
+          break;
+        default:
+          msg = we.Message;
+          break;
+      }
+      return msg;
+    }
+
+    /// <summary>
+    /// Возвращает список вариантов выпуска лекарства
+    /// </summary>
+    /// <param name="ostream">Поток веб-страницы с формами выпуска лекарства</param>
+    /// <returns>Список вариантов выпуска лекарства</returns>
     List<DrugInfo> GetOptions(Stream ostream)
     {
       var options = new List<DrugInfo>();
-        var tableCode = GetTableCode(ostream, "<table id=\"searchTable\" class=\"drug_result\"");
-        var tr = new string[] { "</tr>" }; //разделитель строк таблицы
-        var td = new string[] { "</td>" }; //разделитель ячеек таблицы
-        var rows = tableCode.Split(tr, StringSplitOptions.None); //строки
-        DrugInfo di;
-        for (int i = 0; i < rows.Length - 2; i++)
-        {
-          var cells = Html.GetCells(rows[i]);
-          di = new DrugInfo {
-            Name = tbDrug.Text,
-            FindLink = GetFindLink(cells[1]),
-            Option = cells[2]
-          };
-          options.Add(di);
-        }
+      var tableCode = GetTableCode(ostream, "<table id=\"searchTable\" class=\"drug_result\"");
+      var tr = new string[] { "</tr>" }; //разделитель строк таблицы
+      var td = new string[] { "</td>" }; //разделитель ячеек таблицы
+      var rows = tableCode.Split(tr, StringSplitOptions.None); //строки
+      DrugInfo di;
+      for (int i = 0; i < rows.Length - 2; i++)
+      {
+        var cells = Html.GetCells(rows[i]);
+        di = new DrugInfo {
+          Name = tbDrug.Text,
+          FindLink = GetFindLink(cells[1]),
+          Option = cells[2]
+        };
+        options.Add(di);
+      }
       return options;
     }
     
