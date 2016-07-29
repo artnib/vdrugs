@@ -182,10 +182,7 @@ namespace vdrugs
     {
       if (e.Error != null)
       {
-        if (e.Error is WebException)
-          MessageBox.Show(GetErrorMsg((WebException)e.Error));
-        else
-          MessageBox.Show(e.Error.Message);
+        ShowErrorMsg(e.Error);
       }
       else
         if (e.Cancelled)
@@ -238,9 +235,9 @@ namespace vdrugs
           foreach (DrugInfo di in options)
             lstOptions.Items.Add(di);
       }
-      catch (WebException we)
+      catch (Exception we)
       {
-        MessageBox.Show(GetErrorMsg(we), Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        ShowErrorMsg(we);
       }
     }
 
@@ -249,21 +246,41 @@ namespace vdrugs
     /// </summary>
     /// <param name="we">Исключение</param>
     /// <returns>Сообщение об ошибке</returns>
-    static string GetErrorMsg(WebException we)
+    static string GetErrorMsg(Exception e)
     {
-      string msg;
-      switch (we.Status) {
-        case WebExceptionStatus.NameResolutionFailure:
-          msg = String.Format("Не удалось разрешить имя '{0}'.", baseUrl) + " Проверьте исправность подключения к Интернету.";
-          break;
-        case WebExceptionStatus.ConnectFailure:
-          msg = "Не удалось подключиться к серверу." + " Попробуйте повторить поиск через некоторое время.";
-          break;
-        default:
-          msg = we.Message;
-          break;
+      var msg = e.Message;
+      const string INET = " Проверьте исправность подключения к Интернету.";
+      const string REPEAT = " Попробуйте повторить поиск.";
+      if (e is WebException)
+      {
+        var we = (WebException)e;
+        switch (we.Status)
+        {
+          case WebExceptionStatus.NameResolutionFailure:
+            msg = String.Format("Не удалось разрешить имя '{0}'.", baseUrl) + INET;
+            break;
+          case WebExceptionStatus.ConnectFailure:
+            msg = "Не удалось подключиться к серверу." + REPEAT;
+            break;
+        }
       }
+      else
+        if (e is IOException)
+        {
+          msg = "Ошибка чтения веб-страницы сайта." + INET + REPEAT;
+        }
+        else
+          msg = e.Message;
       return msg;
+    }
+    
+    /// <summary>
+    /// Показывает сообщение об ошибке
+    /// </summary>
+    /// <param name="e">Исключение</param>
+    void ShowErrorMsg(Exception e)
+    {
+      MessageBox.Show(GetErrorMsg(e), Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
     }
 
     /// <summary>
@@ -338,6 +355,7 @@ namespace vdrugs
     {
       var code = String.Empty;
       var sr = new StreamReader(stream);
+      
       var html = sr.ReadToEnd();
       sr.Close();
       var tableStart = html.IndexOf(tableTag);
