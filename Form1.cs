@@ -224,6 +224,7 @@ namespace vdrugs
           lbNotFound.Visible = true;
           return;
         }
+        lbNotFound.Visible = false;
         if (!autoDrugs.Contains(tbDrug.Text))
           autoDrugs.Add(tbDrug.Text);
         if (options.Count == 1)
