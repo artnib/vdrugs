@@ -310,15 +310,19 @@ namespace vdrugs
       return options;
     }
     
+    /// <summary>
+    /// Возвращает ссылку на поиск лекарства
+    /// </summary>
+    /// <param name="cell">Ячейка со ссылкой</param>
+    /// <returns>Относительная ссылка</returns>
     static string GetFindLink(string cell)
     {
       var link = String.Empty;
-      const string href = "href=\"";
-      var hrefPos = cell.IndexOf(href);
+      var hrefPos = cell.IndexOf(Html.HrefStart);
       if (hrefPos != -1)
       {
-        var linkStart = hrefPos + href.Length;
-        var linkEnd = cell.IndexOf("\">");
+        var linkStart = hrefPos + Html.HrefStart.Length;
+        var linkEnd = cell.IndexOf(Html.Quote, linkStart);
         if (linkEnd != -1)
           link = cell.Substring(linkStart, linkEnd - linkStart).Replace("&amp;", "&");
       }
