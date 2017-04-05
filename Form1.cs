@@ -391,7 +391,7 @@ namespace vdrugs
           Drug = cells[2],
           Price = Decimal.Parse(cells[4]),
           Address = cells[5],
-          Phone = cells[6]
+          Phone = Html.RemoveTags(cells[6])
         };
         prices.Add(dp);
       }
